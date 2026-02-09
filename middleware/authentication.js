@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 const { UnauthenticatedError } = require("../errors");
 
 const auth = (req, res, next) => {
-     
   // check header
   const authHeader = req.headers.authorization;
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new UnauthenticatedError("Authentication invalid");
+    return next(new UnauthenticatedError("Authentication invalid"));
   }
   const token = authHeader.split(" ")[1];
 
@@ -16,8 +16,9 @@ const auth = (req, res, next) => {
 
     //attach the user to the job routes
     req.user = { userId: payload.userId, name: payload.name };
+    next();
   } catch (error) {
-    throw new UnauthenticatedError("Authentication failed");
+    return next(new UnauthenticatedError("Authentication failed"));
   }
 };
 
