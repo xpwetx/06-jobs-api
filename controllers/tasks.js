@@ -16,8 +16,8 @@ const getTask = async (req, res) => {
   } = req;
   const task = await Task.findOne({ _id: taskId, createdBy: userId });
   if (!task) {
-    throw new NotFoundError(`No job with id ${taskId}`);
-    res.status(StatusCodes.OK).son({ task });
+    throw new NotFoundError(`No task with id ${taskId}`);
+    res.status(StatusCodes.OK).json({ task });
   }
 };
 
@@ -34,7 +34,7 @@ const updateTask = async (req, res) => {
     params: { id: taskId },
   } = req;
 
-  if (name === "" || task === "") {
+  if (name === "") {
     throw new BadRequestError("Name or task fields cannot be empty");
   }
   const task = await Task.findByIdAndUpdate(
@@ -56,7 +56,7 @@ const deleteTask = async (req, res) => {
   if (!task) {
     throw new NotFoundError(`No task with id ${taskId}`);
   }
-  res.status(StatusCodes.OK).send();
+  res.status(StatusCodes.OK).json({ task });
 };
 
 module.exports = {
